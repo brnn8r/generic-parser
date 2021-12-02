@@ -3,38 +3,30 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace generic_parser_tests
+namespace GenericParserTests
 {
     [TestFixture]
     public class Tests
     {
 
-        public class TestCase<T>
+        [Test]
+        public void Test_string_to_datetimeoffset()
         {
-            public object O { get; }
-            public T ExpectedValue { get; }
-  
-            public T DefaultValue { get; set; }            
+            DateTimeOffset testoffset = "2/12/2021".ConvertTo<DateTimeOffset>();
 
-            public TestCase(object o, T expectedValue = default, T defaultValue = default)
-            {
-                this.O = o;                
-                DefaultValue = defaultValue;
+            Assert.That(testoffset, Is.EqualTo(new DateTimeOffset(new DateTime(2021,12,2,0,0,0, DateTimeKind.Local))));
 
-                if (EqualityComparer<T>.Default.Equals(expectedValue, default))
-                {
-                    ExpectedValue = DefaultValue;
-                }
-                else
-                {
-                    ExpectedValue = expectedValue;
-                }
-            }
+            DateTimeOffset testoffset2 = "2021-12-02T02:36:17+0000".ConvertTo<DateTimeOffset>();
 
-            public override string ToString()
-            {
-                return $"TestCase(o:{O}, d:{DefaultValue})";
-            }
+            Assert.That(testoffset2, Is.EqualTo(new DateTimeOffset(2021, 12, 2, 2, 36, 17, 0, TimeSpan.Zero)));
+        }
+
+        [Test]
+        public void Test_string_to_datetime()
+        {
+            DateTime testoffset = "2/12/2021".ConvertTo<DateTime>();
+
+            Assert.That(testoffset, Is.EqualTo(new DateTime(2021, 12, 2, 0, 0, 0)));
         }
 
         public static IEnumerable<TestCase<int>> GetIntTestCases()
@@ -47,7 +39,7 @@ namespace generic_parser_tests
         [TestCaseSource(nameof(GetIntTestCases))]
         public void Test_non_int_to_int(TestCase<int> test)
         {
-            int testInt = test.O.ConvertTo(test.DefaultValue);
+            int testInt = test.TestValue.ConvertTo(test.DefaultValue);
 
             Assert.That(testInt, Is.EqualTo(test.ExpectedValue).Or.EqualTo(test.DefaultValue));
         }
@@ -70,7 +62,7 @@ namespace generic_parser_tests
         [TestCaseSource(nameof(GetNullableIntTestCases))]
         public void Test_non_int_to_nullable_int(TestCase<int?> test)
         {
-            int? testInt = test.O.ConvertTo(test.DefaultValue);
+            int? testInt = test.TestValue.ConvertTo(test.DefaultValue);
 
             Assert.That(testInt, Is.EqualTo(test.ExpectedValue).Or.EqualTo(test.DefaultValue));
         }
