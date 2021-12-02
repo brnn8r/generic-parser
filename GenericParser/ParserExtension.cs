@@ -15,6 +15,8 @@ namespace GenericParser
         {
             if (o is T t) return t;
 
+            if (o == null) return defaultValue;
+
             try
             {
                 return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFrom(o);
