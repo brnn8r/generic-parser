@@ -19,15 +19,19 @@ namespace GenericParser
 
             try
             {
-                return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFrom(o);
+                return (T)Convert.ChangeType(o, typeof(T));
+
             }
-            catch (ArgumentException)
+            catch (Exception)
             {
-                return defaultValue;
-            }            
-            catch (NotSupportedException)
-            {
-                return defaultValue;
+                try
+                {
+                    return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFrom(o);
+                }
+                catch (Exception)
+                {
+                    return defaultValue;
+                }
             }
         }
     }
