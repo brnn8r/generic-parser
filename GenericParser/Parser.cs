@@ -15,7 +15,7 @@ namespace GenericParser
 
         public static T Parse<T>(object o, T defaultValue = default)
         {
-            return o.ConvertTo<T>(defaultValue);
+            return o.ConvertTo(defaultValue);
         }
     }
 }

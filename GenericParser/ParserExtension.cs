@@ -20,7 +20,6 @@ namespace GenericParser
             try
             {
                 return (T)Convert.ChangeType(o, typeof(T));
-
             }
             catch (Exception)
             {
